@@ -1,7 +1,9 @@
-ID_PER=202502, Operazione=Costruttore, Stato=OK, File=../data/202502_unitacr.csv, Data=2026-02-19 14:35:52
-ID_PER=202502, Operazione=givemedataframe, Stato=OK, Data=2026-02-19 14:35:52
-ID_PER=202502, Operazione=pulisci, Filtro=COD_UNT, Righe OK=25, Data=2026-02-19 14:35:52
-ID_PER=202502, Operazione=pulisci, Filtro=COD_ACR, Righe OK=25, Data=2026-02-19 14:35:53
-ID_PER=202502 - Tabelle create: df_grezzo=25, tab_ok=25, tab_scarti=0, Data=2026-02-19 14:35:54.558700
-ID_PER=202502, Operazione=givemedataframe, Stato=OK, Data=2026-02-19 14:35:54
+ID_PER=202502, Operazione=Costruttore, Stato=OK, File=../data/202502_unitacr.csv, Data=2026-02-19 17:07:52
+ID_PER=202502, Operazione=givemedataframe, Stato=OK, Data=2026-02-19 17:07:52
+ID_PER=202502, Operazione=pulisci, Filtro=COD_UNT, Righe OK=25, Data=2026-02-19 17:07:52
+ID_PER=202502, Operazione=pulisci, Filtro=COD_ACR, Righe OK=25, Data=2026-02-19 17:07:52
+ID_PER=202502 - Tabelle create: df_grezzo=25, tab_ok=25, tab_scarti=0, Data=2026-02-19 17:07:53.464194
+ID_PER=202502, Operazione=givemedataframe, Stato=OK, Data=2026-02-19 17:07:53
 ID_PER=202502 - Caricamento completato su Oracle tabella COGE02_UNTACR
+ID_PER=202502, Operazione=givemedataframe, Stato=OK, Data=2026-02-19 17:07:53
+ID_PER=202502 - Caricamento completato su Oracle tabella COGE01_UNTACR_SCARTI

@@ -96,7 +96,7 @@ echo -e "\033[1;34mFile CSV e JSON trovati correttamente.\033[0m"
 # -----------------------------
 PYTHON_EXE="/mnt/c/Users/botta/Desktop/Work/adv_env/bin/python"  # wsl path 
 # "C:/Users/botta/Desktop/Work/adv_env_win/Scripts/python.exe" # windows path
-PYTHON_SCRIPT="${PATH_BASE}scr/processa_flusso.py"
+PYTHON_SCRIPT="${PATH_BASE}src/processa_flusso.py"
 
 CMD="$PYTHON_EXE $PYTHON_SCRIPT --user $O_USER --password $PASSWORD --dsn $DSN --idper $IDPER"
 

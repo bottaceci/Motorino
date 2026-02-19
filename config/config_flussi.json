@@ -21,7 +21,8 @@
       "COD_UNT": {"type": "positive_number"},
       "COD_ACR": {"type": "string_no_numbers"}
     },
-    "table": "COGE02_UNTACR"
+    "table": "COGE02_UNTACR",
+    "table_scarti": "COGE01_UNTACR_SCARTI"
   },
     "presenze": {
     "columns": {
@@ -32,7 +33,8 @@
 	  "ORESTRAOR": {"type": "positive_number"},
 	  "OREPERMES": {"type": "positive_number"}
     },
-    "table": "GRP02_PRS"
+    "table": "GRP02_PRS",
+    "table_scarti": "GRP01_PRS_SCARTI"
   },
     "ruoli": {
     "columns": {

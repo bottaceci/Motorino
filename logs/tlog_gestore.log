@@ -1,4 +1,6 @@
-ID_PER=202502 - Tabelle create: df_grezzo=18, tab_ok=16, tab_scarti=2, Data=2026-02-19 14:35:50.727977
+ID_PER=202502 - Tabelle create: df_grezzo=18, tab_ok=16, tab_scarti=2, Data=2026-02-19 17:07:51.007536
 ID_PER=202502 - Caricamento completato su Oracle tabella GRP02_PRS
-ID_PER=202502 - Tabelle create: df_grezzo=25, tab_ok=25, tab_scarti=0, Data=2026-02-19 14:35:54.558700
+ID_PER=202502 - Caricamento completato su Oracle tabella GRP01_PRS_SCARTI
+ID_PER=202502 - Tabelle create: df_grezzo=25, tab_ok=25, tab_scarti=0, Data=2026-02-19 17:07:53.464194
 ID_PER=202502 - Caricamento completato su Oracle tabella COGE02_UNTACR
+ID_PER=202502 - Caricamento completato su Oracle tabella COGE01_UNTACR_SCARTI

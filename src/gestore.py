@@ -60,6 +60,9 @@ class GestoreFlussoDipendenti:
         # Estraggo il nome della tabella dalla configurazione
         nome_tabella = self.config_all[flusso_corrente]["table"]
 
+        # Estraggo il nome della tabella scarti dalla configurazione
+        nome_tabella_scarti = self.config_all[flusso_corrente]["table_scarti"]
+
         # Applico pulizia automatica
         tab_ok, tab_scarti = tabella.pulisci(config_corrente)
 
@@ -69,9 +72,9 @@ class GestoreFlussoDipendenti:
             f"tab_ok={tab_ok.df.count()}, tab_scarti={tab_scarti.df.count()}, Data={datetime.now()}"
         )
 
-        return df_grezzo, tab_ok, tab_scarti, nome_tabella
+        return df_grezzo, tab_ok, tab_scarti, nome_tabella, nome_tabella_scarti
 
-    def load_to_oracle(self, tab_ok, flusso_corrente, table_name, path_csv, user="VGLSA", password="VGLSA",
+    def load_to_oracle(self, tab_ok, flusso_corrente, table_name, path_csv, scarti=False, user="VGLSA", password="VGLSA",
                        dsn="localhost:1521/orcl"):
         """
         Carica su Oracle un DataFrame pulito tab_ok, prendendo ID_PER dal nome del file
@@ -99,16 +102,28 @@ class GestoreFlussoDipendenti:
         partition_name = f"P_{id_per}"
         tab_ok_df = tab_ok_df.withColumn("ID_PER", lit(id_per))
 
-        # Seleziono solo le colonne indicate nel JSON + ID_PER
-        tab_ok_oracle = tab_ok_df.select("ID_PER", *columns_oracle)
+        if scarti:
+            # Aggiungo data di inserimento
+            tab_ok_df = tab_ok_df.withColumn("D_INS", lit(datetime.now()))
+
+            # Aggiungo IDRUN (dummy, vedere se riesco ad inserirlo bene)
+            tab_ok_df = tab_ok_df.withColumn("ID_RUN", lit(1))
+
+            # Seleziono solo le colonne indicate nel JSON + ID_PER
+            tab_ok_oracle = tab_ok_df.select("ID_RUN", "D_INS", "ID_PER", *columns_oracle)
+        else:
+            tab_ok_oracle = tab_ok_df.select("ID_PER", *columns_oracle)
 
         # Converto in lista di tuple Python
         rows = [tuple(row) for row in tab_ok_oracle.collect()]
 
         # Connessione Oracle e gestione partizione
         db = DBUtils(user=user, password=password, dsn=dsn)
-        db.ensure_partition(table_name, partition_name, id_per)
-        db.batch_insert(table_name, ["ID_PER"] + columns_oracle, rows)
+        if scarti:
+            db.batch_insert(table_name, ["ID_RUN"] + ["D_INS"] + ["ID_PER"] + columns_oracle, rows)
+        else:
+            db.ensure_partition(table_name, partition_name, id_per)
+            db.batch_insert(table_name, ["ID_PER"] + columns_oracle, rows)
         db.close()
 
         self.logger.info(f"ID_PER={id_per} - Caricamento completato su Oracle tabella {table_name}")
