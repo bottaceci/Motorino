@@ -57,6 +57,9 @@ class GestoreFlussoDipendenti:
 
         config_corrente = self.config_all[flusso_corrente]["columns"]
 
+        # Estraggo il nome della tabella dalla configurazione
+        nome_tabella = self.config_all[flusso_corrente]["table"]
+
         # Applico pulizia automatica
         tab_ok, tab_scarti = tabella.pulisci(config_corrente)
 
@@ -66,7 +69,7 @@ class GestoreFlussoDipendenti:
             f"tab_ok={tab_ok.df.count()}, tab_scarti={tab_scarti.df.count()}, Data={datetime.now()}"
         )
 
-        return df_grezzo, tab_ok, tab_scarti
+        return df_grezzo, tab_ok, tab_scarti, nome_tabella
 
     def load_to_oracle(self, tab_ok, flusso_corrente, table_name, path_csv, user="VGLSA", password="VGLSA",
                        dsn="localhost:1521/orcl"):
@@ -85,7 +88,7 @@ class GestoreFlussoDipendenti:
         # Controllo consistenza colonne
         missing_cols = [c for c in columns_oracle if c not in tab_ok.df.columns]
         if missing_cols:
-            msg = f"Incoerenza colonne: c'è incoerenza tra il .json e le tabelle oralce {missing_cols}"
+            msg = f"Incoerenza colonne: c'è incoerenza tra il .json e le tabelle oracle {missing_cols}"
             self.logger.error(msg)
             raise ValueError(msg)  # oppure solo log, a seconda di cosa vuoi fare
 

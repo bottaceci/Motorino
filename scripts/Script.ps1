@@ -3,7 +3,8 @@ param(
     [string]$password = "VGLSA",
     [string]$dsn = "localhost:1521/orcl",
     [string]$flusso,
-    [string]$chiave_json
+    [string]$chiave_json,
+    [string]$tabella
 )
 
 # --- Percorsi base ---
@@ -68,10 +69,10 @@ try {
 }
 
 # --- Esecuzione script Python ---
-$pythonExe = "C:\Users\lddrc\Anaconda3\python.exe"
+$pythonExe = "C:\Users\botta\Desktop\Work\adv_env_win\Scripts\python.exe"
 $pythonScript = Join-Path $pathBase "scr\processa_flusso.py"
 
-$cmd = "$pythonExe $pythonScript --user $user --password $password --dsn $dsn --flusso $flusso --chiave_json $chiave_json --csv $pathCsv --json $pathConfigJson --log $pathLog"
+$cmd = "$pythonExe $pythonScript --user $user --password $password --dsn $dsn --flusso $flusso --chiave_json $chiave_json --tabella $tabella"
 
 Write-Host "Avvio processo Python..." -ForegroundColor Cyan
 Write-Log "Avvio processo Python con comando: $cmd" "INFO"

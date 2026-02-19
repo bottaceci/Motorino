@@ -19,8 +19,9 @@
   "unitacr": {
     "columns": {
       "COD_UNT": {"type": "positive_number"},
-      "DESC_UNT": {"type": "string_length", "length": 3}
-    }
+      "COD_ACR": {"type": "string_no_numbers"}
+    },
+    "table": "COGE02_UNTACR"
   },
     "presenze": {
     "columns": {
@@ -30,7 +31,8 @@
 	  "OREPRES": {"type": "positive_number"},
 	  "ORESTRAOR": {"type": "positive_number"},
 	  "OREPERMES": {"type": "positive_number"}
-    }
+    },
+    "table": "GRP02_PRS"
   },
     "ruoli": {
     "columns": {
@@ -46,7 +48,7 @@
       "COGNOME": {"type": "string_no_numbers"},
       "NOME": {"type": "string_no_numbers"},
       "DT_INI_UNT": {"type": "date", "format": "yyyy-MM-dd"},
-      "TIPO_CTR": {"type": {"type": "string", "skip_validation": true},
+      "TIPO_CTR": {"type": "string", "skip_validation": true},
       "COD_CTR": {"type": "positive_number"},
       "COD_LIV": {"type": "string", "skip_validation": true},
       "DT_INI_LIV": {"type": "date", "format": "yyyy-MM-dd"},
@@ -67,7 +69,7 @@
       "QTA_PART_TIME": {"type": "string", "skip_validation": true},
       "TITOLARE1": {"type": "string", "skip_validation": true},
       "TITOLARE2": {"type": "string", "skip_validation": true},
-      "MOTIVO_PROMOZIONE": "string", "skip_validation": true},
+      "MOTIVO_PROMOZIONE": {"type":"string", "skip_validation": true},
       "FASCICOLO_AGGIORNATO": {"type": "string", "skip_validation": true},
       "TITOLO_STUDIO": {"type": "positive_number"},
       "DESC_CTR": {"type": "string", "skip_validation": true},

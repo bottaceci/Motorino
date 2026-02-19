@@ -1,11 +1,7 @@
-ID_PER=202501, Operazione=Costruttore, Stato=OK, File=../data/202501_presenze.csv, Data=2025-10-01 14:09:59
-ID_PER=202501, Operazione=givemedataframe, Stato=OK, Data=2025-10-01 14:09:59
-ID_PER=202501, Operazione=pulisci, Filtro=MATRICOLA, Righe OK=18, Data=2025-10-01 14:10:00
-ID_PER=202501, Operazione=pulisci, Filtro=CF, Righe OK=17, Data=2025-10-01 14:10:01
-ID_PER=202501, Operazione=pulisci, Filtro=DATA_PRES, Righe OK=17, Data=2025-10-01 14:10:01
-ID_PER=202501, Operazione=pulisci, Filtro=OREPRES, Righe OK=18, Data=2025-10-01 14:10:02
-ID_PER=202501, Operazione=pulisci, Filtro=ORESTRAOR, Righe OK=18, Data=2025-10-01 14:10:02
-ID_PER=202501, Operazione=pulisci, Filtro=OREPERMES, Righe OK=18, Data=2025-10-01 14:10:02
-ID_PER=202501 - Tabelle create: df_grezzo=18, tab_ok=16, tab_scarti=2, Data=2025-10-01 14:10:04.088231
-ID_PER=202501, Operazione=givemedataframe, Stato=OK, Data=2025-10-01 14:10:04
-ID_PER=202501 - Caricamento completato su Oracle tabella GRP02_PRS
+ID_PER=202502, Operazione=Costruttore, Stato=OK, File=../data/202502_unitacr.csv, Data=2026-02-19 14:35:52
+ID_PER=202502, Operazione=givemedataframe, Stato=OK, Data=2026-02-19 14:35:52
+ID_PER=202502, Operazione=pulisci, Filtro=COD_UNT, Righe OK=25, Data=2026-02-19 14:35:52
+ID_PER=202502, Operazione=pulisci, Filtro=COD_ACR, Righe OK=25, Data=2026-02-19 14:35:53
+ID_PER=202502 - Tabelle create: df_grezzo=25, tab_ok=25, tab_scarti=0, Data=2026-02-19 14:35:54.558700
+ID_PER=202502, Operazione=givemedataframe, Stato=OK, Data=2026-02-19 14:35:54
+ID_PER=202502 - Caricamento completato su Oracle tabella COGE02_UNTACR
