@@ -2,7 +2,7 @@ import logging
 import json
 import os
 from datetime import datetime
-from table import TabellaDipendenti, StagingTable
+from table import TabellaDipendenti, StagingTable, FactTable
 from db_utils import DBUtils
 from pyspark.sql.functions import current_date, col, to_date, when, current_timestamp, monotonically_increasing_id, lit, upper, lower, length, udf
 from pyspark.sql import types as T
@@ -453,4 +453,56 @@ class GestoreDimensioni:
         """
 
         self.db.run_statement(merge_sql)
+
+    def load_periodo(self, initend):
+        config_corrente = self.config_all["periodo"]
+        self.db.run_procedure("P_LOAD_PERIOD", config_corrente["initend"])
+
+    def process_fact_table(self, path_log, current_dimension):
+        if current_dimension not in self.config_all:
+            msg = f"Dimensione {current_dimension} non trovata nella configurazione JSON"
+            self.logger.error(msg)
+            raise ValueError(msg)
+        
+        config_corrente = self.config_all[current_dimension]
+
+        # Creare oggetto FactTable
+        tabella = FactTable(config_corrente,
+                            self.idper,
+                            user = self.user,
+                            pw = self.pw,
+                            n_user=self.n_user,
+                            n_pw=self.n_pw,
+                            dsn = self.dsn,
+                            path_log=path_log)
+        
+        # Ricavare dataframe
+        df_grezzo = tabella.givemedataframe()
+
+        # Controllo consistenza colonne
+        missing_cols = [c for c in config_corrente["fact_columns"] if c not in df_grezzo.columns]
+        if missing_cols:
+            msg = f"Incoerenza colonne: c'è incoerenza tra il .json e le tabelle oracle {missing_cols}"
+            self.logger.error(msg)
+            raise ValueError(msg)
+
+        # Selezionare colonne corrette
+        fact_table = df_grezzo.select(*config_corrente["fact_columns"])
+
+        # Estrarre nome tabella sul DM
+        nome_tabella = config_corrente["fact_table"]
+
+        # Write to database
+        fact_table.write.jdbc(url=f"jdbc:oracle:thin:@//{self.dsn}", 
+                            table=nome_tabella,
+                            mode='append',
+                            properties={"driver": "oracle.jdbc.OracleDriver",
+                                        "user": self.n_user,
+                                        "password": self.n_pw
+                            })
+
+        # return tabella, nome_tabella
+
+
+
 

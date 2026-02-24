@@ -52,5 +52,36 @@
     },
     "merge_key": "CF",
     "dimension_columns": ["CF", "NOME", "DN", "SALARIO","D_INS", "D_UPD", "LAST_ID_PER"]
+  },
+  "presenze": {
+    "fact_table": "FCT_PRESENZE",
+    "02_table": {
+        "name": "GRP02_PRS",
+        "columns": ["DATA_PRES", "CF", "OREPRES", 
+                        "ORESTRAOR", "OREPERMES"]
+        },
+    "dimension_tables": {
+        "D_ANAGRAFICA_SCD": {
+            "columns": ["ID_DIP", "COD_RUOLO", "COD_UNT", "CF"],
+            "join_key": "CF"
+        },
+        "D_UNITA_SCD": {
+            "columns": ["ID_UNT", "COD_UNT"],
+            "join_key": "COD_UNT"
+        },
+        "D_RUOLI_MERGE": {
+            "columns": ["ID_RUOLO", "COD_RUOLO"],
+            "join_key": "COD_RUOLO"
+        },
+        "D_PERIOD": {
+            "columns": ["ID_PERIOD", "ID_YEAR_MONTH", "DAY AS DATA_PRES"],
+            "join_key": "DATA_PRES"
+        }
+    },
+    "fact_columns": ["ID_PERIOD", "ID_YEAR_MONTH", "ID_DIP", "ID_UNT", "ID_RUOLO",
+                    "OREPRES", "ORESTRAOR", "OREPERMES"]
+  },
+  "periodo": {
+    "initend": [202501, 202504]
   }
 }

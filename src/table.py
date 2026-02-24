@@ -367,5 +367,105 @@ class StagingTable:
         tabella_upd.conf = self.conf
 
         return tabella_ins, tabella_hist_ins, tabella_upd
+    
+class FactTable:
+    def __init__(self, conf, idper, user, pw, n_user, n_pw, dsn, path_log):
+        self.spark = (
+            SparkSession.builder
+                .master("local[1]")
+                .appName("FlussoGenerico")
+                .getOrCreate()
+        )
 
+        self.idper = idper
+        self.path_log = path_log
+        self.conf = conf
+        self.user = user
+        self.pw = pw
+        self.n_user = n_user
+        self.n_pw = n_pw
+        self.dsn = dsn
+
+        OJDBC = "/home/ceci/jars/ojdbc17.jar"
+
+        os.environ["PYSPARK_SUBMIT_ARGS"] = (
+            f'--jars "{OJDBC}" '
+            f'--driver-class-path "{OJDBC}" '
+            "pyspark-shell"
+        )
+
+        # Read 02 table
+        table_02 = conf["02_table"]
+        sql = f"select {",".join(table_02["columns"])} from {table_02["name"]} PARTITION(P_{self.idper})"
+
+        self.df = (
+            self.spark.read
+                .format("jdbc")
+                .option("url", f"jdbc:oracle:thin:@//{self.dsn}")
+                .option("driver", "oracle.jdbc.OracleDriver")
+                .option("query", sql)
+                .option("user", self.user)
+                .option("password", self.pw)
+                .load()
+        )
+
+        # Creazione lista tabelle dal datamart
+        self.table_list = []
+        for table in self.conf["dimension_tables"]:
+            self.table_list.append(table)
+
+        # JOIN con la tabella 02
+        for t in self.table_list:
+            sql_1 = f"select {",".join(self.conf["dimension_tables"][t]["columns"])} from {t} PARTITION(P_{self.idper})"
+
+            df_1 = (
+                    self.spark.read
+                        .format("jdbc")
+                        .option("url", f"jdbc:oracle:thin:@//{self.dsn}")
+                        .option("driver", "oracle.jdbc.OracleDriver")
+                        .option("query", sql_1)
+                        .option("user", self.n_user)
+                        .option("password", self.n_pw)
+                        .load()
+                )
+            
+            self.df = self.df.join(df_1, on=self.conf["dimension_tables"][t]["join_key"])
+
+        # Log iniziale
+        logging.info(
+            "ID_PER=%s, Operazione=Costruttore, Stato=OK, Tabelle=%s, Data=%s",
+            self.idper, self.table_list, datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+
+    # Funzione che mostra la "tabella".
+    def show(self):
+        if self.df:
+            self.df.show(truncate=False)
+            logging.info("ID_PER=%s, Operazione=Show, Stato=OK, Righe=%s, Data=%s",
+                         self.idper, self.df.count(), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        else:
+            print("DataFrame vuoto.")
+            logging.info("ID_PER=%s, Operazione=Show, Stato=VUOTO, Data=%s",
+                         self.idper, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+    def printSchema(self):
+        if self.df:
+            self.df.printSchema()
+            logging.info(
+                "ID_PER=%s, Operazione=printSchema, Stato=OK, Data=%s",
+                self.idper,
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            )
+        else:
+            print("DataFrame vuoto.")
+            logging.info(
+                "ID_PER=%s, Operazione=printSchema, Stato=VUOTO, Data=%s",
+                self.idper,
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            )
+
+    def givemedataframe(self):
+        logging.info("ID_PER=%s, Operazione=givemedataframe, Stato=OK, Data=%s",
+                     self.idper, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        return self.df
 

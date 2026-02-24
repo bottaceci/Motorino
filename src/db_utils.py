@@ -54,6 +54,16 @@ class DBUtils:
         self.cur.execute(statement)
         self.conn.commit()
 
+    def run_procedure(self, proc, args=[]):
+        """
+        Runs a single SQL procedure stored in the database
+        """
+        if args:
+            self.cur.callproc(proc,args)
+        else:
+            self.cur.callproc(proc)
+        self.conn.commit()
+
     def close(self):
         self.cur.close()
         self.conn.close()

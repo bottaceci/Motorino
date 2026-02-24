@@ -84,9 +84,17 @@ class Operazioni:
         # colonna dell'altra tavola e nullo, valid_ sara False, altrimenti true
 
     @staticmethod
+    def primary_key(df, col_name):
+        """
+        Controlla che la colonna col_name possa essere una PK, ossia che non contenga
+        valori doppi o nulli
+        """
+        # check if there are null or multiple values, and raise error if so
+
+    @staticmethod
     def equivalence(df, new_col, old_col):
         """
-        Controlla se il vecchio valore di una colonna e uguale al nuovo
+        Controlla che il vecchio valore di una colonna sia uguale al nuovo
         """
         return df.withColumn(
             f"change_{new_col}",
@@ -99,7 +107,7 @@ class Operazioni:
     @staticmethod
     def greater_than(df, col1, col2):
         """
-        Controlla se la il valore in col1 e maggiore del valore in col2
+        Controlla che il valore in col1 sia maggiore del valore in col2
         """
         return df.withColumn(
             f"greater_{col1}",
