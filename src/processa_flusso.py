@@ -1,5 +1,5 @@
 import argparse
-from gestore import GestoreFlussoDipendenti
+from gestore import GestoreFlusso
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--user", required=True)
@@ -13,7 +13,7 @@ path_config_json = "../config/config_flussi.json"
 path_file_flussi = "../config/anagrafica_flussi.txt"
 path_log = "../logs/tlog.log"
 
-gestore = GestoreFlussoDipendenti(path_log_gestore, path_config_json)
+gestore = GestoreFlusso(path_log_gestore, path_config_json)
 
 with open(path_file_flussi) as f:
     for flusso in f:

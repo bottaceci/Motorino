@@ -1,11 +1,23 @@
 {
-  "flusso": {
+  "flusso_prova": {
     "columns": {
 	  "CF": {"type": "string_length", "length": 16},      
-      "NOME": {"type": "string_no_numbers"},
+    "NOME": {"type": "string_no_numbers"},
 	  "DN": {"type": "date", "format": "yyyy-MM-dd"},
-	  "SALARIO": {"type": "positive_number"}  
-    }
+	  "SALARIO": {"type": "positive_number"} 
+    },
+    "table": "GRP02_FLUSSO_PROVA",
+    "table_scarti": "GRP01_FLUSSO_PROVA_SCARTI"
+  },
+  "fl_2": {
+    "columns": {
+	  "CF": {"type": "string_length", "length": 16},      
+    "NOME": {"type": "string_no_numbers"},
+	  "DN": {"type": "date", "format": "yyyy-MM-dd"},
+	  "SALARIO": {"type": "positive_number"} 
+    },
+    "table": "GRP02_FL_PR_2",
+    "table_scarti": "GRP01_FL_PR_2_SCARTI"
   },
   "flusso_dip": {
     "columns": {
@@ -24,19 +36,19 @@
     "table": "COGE02_UNTACR",
     "table_scarti": "COGE01_UNTACR_SCARTI"
   },
-    "presenze": {
+  "presenze": {
     "columns": {
       "MATRICOLA": {"type": "positive_number"},
       "CF": {"type": "string_length", "length": 16},
-	  "DATA_PRES": {"type": "date", "format": "yyyy-MM-dd"},
-	  "OREPRES": {"type": "positive_number"},
-	  "ORESTRAOR": {"type": "positive_number"},
-	  "OREPERMES": {"type": "positive_number"}
+      "DATA_PRES": {"type": "date", "format": "yyyy-MM-dd"},
+      "OREPRES": {"type": "positive_number"},
+      "ORESTRAOR": {"type": "positive_number"},
+      "OREPERMES": {"type": "positive_number"}
     },
     "table": "GRP02_PRS",
     "table_scarti": "GRP01_PRS_SCARTI"
   },
-    "ruoli": {
+  "ruoli": {
     "columns": {
       "COD_RUOLO": {"type": "positive_number"},
       "DESC_RUOLO": {"type": "string", "skip_validation": true}

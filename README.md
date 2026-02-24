@@ -108,6 +108,7 @@ pip install pyspark
       presenze
       unitacr
       ```
+      I flussi vengono processati nell'ordine in cui sono stati scritti.
 
 3. **Installazione dipendenze**  
    Da eseguire una sola volta:  

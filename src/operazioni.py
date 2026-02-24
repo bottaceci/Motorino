@@ -70,3 +70,42 @@ class Operazioni:
                 True
             ).otherwise(False)
         )
+    
+    @staticmethod
+    def foreign_key(df, col_name, table_name):
+        """
+        Controlla che la colonna col_name contenga solo valori contenuti nella colonna
+        con lo stesso nome della tabella table_name
+        """
+        # leggere colonna da tabella 
+
+        # ritornare df con colonna valid se il valore e presente - per il controllo
+        # fare una left join con la tabella usando quella colonna, se il valore della 
+        # colonna dell'altra tavola e nullo, valid_ sara False, altrimenti true
+
+    @staticmethod
+    def equivalence(df, new_col, old_col):
+        """
+        Controlla se il vecchio valore di una colonna e uguale al nuovo
+        """
+        return df.withColumn(
+            f"change_{new_col}",
+            when(
+               col(new_col) != col(old_col),
+               True
+            ).otherwise(False)
+        )
+    
+    @staticmethod
+    def greater_than(df, col1, col2):
+        """
+        Controlla se la il valore in col1 e maggiore del valore in col2
+        """
+        return df.withColumn(
+            f"greater_{col1}",
+            when(
+                col(col1) > col(col2),
+                True
+            ).otherwise(False)
+        )
+        

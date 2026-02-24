@@ -1,0 +1,56 @@
+{
+  "ruoli": {
+    "dimension_table": "D_RUOLI_MERGE",
+    "02_tables": {
+        "GRP02_RUO": {
+            "columns": ["ID_PER", "COD_RUOLO", "DESC_RUOLO"]
+        }
+    },
+    "merge_key" : "COD_RUOLO",
+    "dimension_columns": ["COD_RUOLO", "DESC_RUOLO", "D_INS", "D_UPD", "LAST_ID_PER"]
+  },
+  "unita": {
+    "dimension_table": "D_UNITA_SCD",
+    "02_tables": {
+        "GRP02_UNT": {
+            "columns": ["ID_PER", "COD_UNT", "DESC_UNT"]
+        },
+        "COGE02_UNTACR": {
+            "columns": ["COD_UNT", "COD_ACR"],
+            "join_key": "COD_UNT"
+        },
+        "ASL02_ACR": {
+            "columns": ["COD_ACR", "DESC_ACR"],
+            "join_key": "COD_ACR"
+        }
+    },
+    "OLD_columns": ["ID_UNT","COD_UNT","COD_ACR","LAST_ID_PER"],
+    "SCD_columns": ["COD_ACR"],
+    "SCD_join_key": "COD_UNT",
+    "dimension_columns": ["ID_UNT","COD_UNT", "DESC_UNT", "COD_ACR", "DESC_ACR","D_INS",
+                            "D_UPD", "D_INIVAL", "D_ENDVAL", "LAST_ID_PER"]
+  },
+  "flusso_prova": {
+    "dimension_table": "D_PROVA_SCD",
+    "02_tables": {
+        "GRP02_FLUSSO_PROVA":{
+            "columns": ["ID_PER", "CF", "NOME", "DN", "SALARIO"]
+        }
+    },
+    "OLD_columns": ["ID_FL", "CF", "SALARIO","LAST_ID_PER"],
+    "SCD_columns": ["SALARIO"],
+    "SCD_join_key": "CF",
+    "dimension_columns": ["ID_FL", "CF", "NOME", "DN", "SALARIO","D_INS",
+                            "D_UPD", "D_INIVAL", "D_ENDVAL", "LAST_ID_PER"]
+  },
+  "fl_2": {
+    "dimension_table": "D_PROVA_MRG",
+    "02_tables": {
+        "GRP02_FL_PR_2":{
+            "columns": ["ID_PER", "CF", "NOME", "DN", "SALARIO"]
+        }
+    },
+    "merge_key": "CF",
+    "dimension_columns": ["CF", "NOME", "DN", "SALARIO","D_INS", "D_UPD", "LAST_ID_PER"]
+  }
+}

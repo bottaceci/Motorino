@@ -47,6 +47,13 @@ class DBUtils:
         self.cur.executemany(sql_insert, rows)
         self.conn.commit()
 
+    def run_statement(self,statement):
+        """
+        Runs a single SQL statement
+        """
+        self.cur.execute(statement)
+        self.conn.commit()
+
     def close(self):
         self.cur.close()
         self.conn.close()
