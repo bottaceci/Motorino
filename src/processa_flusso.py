@@ -37,3 +37,5 @@ with open(path_file_flussi) as f:
                                dsn=args.dsn)
         print(f"[INFO] Flusso '{flusso}' caricato correttamente su Oracle.")
 
+gestore.close_spark_session()
+

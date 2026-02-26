@@ -6,6 +6,7 @@ from table import TabellaDipendenti, StagingTable, FactTable
 from db_utils import DBUtils
 from pyspark.sql.functions import current_date, col, to_date, when, current_timestamp, monotonically_increasing_id, lit, upper, lower, length, udf
 from pyspark.sql import types as T
+from pyspark.sql import SparkSession
 
 
 class GestoreFlusso:
@@ -24,6 +25,14 @@ class GestoreFlusso:
         # Carico la configurazione JSON
         with open(path_config_json, 'r') as f:
             self.config_all = json.load(f)
+
+        # Create spark session
+        self.spark = (
+            SparkSession.builder
+                .master("local[1]")
+                .appName("FlussoGenerico")
+                .getOrCreate()
+        )
 
     def genera_idper(self, path_csv):
         """
@@ -45,7 +54,7 @@ class GestoreFlusso:
         id_per = self.genera_idper(path_csv)
 
         # Creo oggetto TabellaDipendenti passando ID_PER
-        tabella = TabellaDipendenti(path_csv, path_log, id_per)
+        tabella = TabellaDipendenti(self.spark, path_csv, path_log, id_per)
 
         # Recupero il dataframe grezzo
         df_grezzo = tabella.givemedataframe()
@@ -130,6 +139,9 @@ class GestoreFlusso:
         self.logger.info(f"ID_PER={id_per} - Caricamento completato su Oracle tabella {table_name}")
         print("Caricamento completato!")
 
+    def close_spark_session(self):
+        self.spark.stop()
+
 
 class GestoreDimensioni:
     def __init__(self, path_log_gestore, path_config_json, idper, user, pw, dsn, n_user, n_pw):
@@ -164,6 +176,14 @@ class GestoreDimensioni:
             "pyspark-shell"
         )
 
+        # Create Spark Sessione 
+        self.spark = (
+            SparkSession.builder
+                .master("local[1]")
+                .appName("FlussoGenerico")
+                .getOrCreate()
+        )
+
     def process_dimension(self, path_log, current_dimension):
         # Get configuration for current dimension
         if current_dimension not in self.config_all:
@@ -176,6 +196,7 @@ class GestoreDimensioni:
         # Creare oggetto StagingTable
         tabella = StagingTable(config_corrente,
                                self.idper,
+                               spark = self.spark,
                                user = self.user,
                                pw = self.pw,
                                dsn = self.dsn,
@@ -454,7 +475,7 @@ class GestoreDimensioni:
 
         self.db.run_statement(merge_sql)
 
-    def load_periodo(self, initend):
+    def load_periodo(self):
         config_corrente = self.config_all["periodo"]
         self.db.run_procedure("P_LOAD_PERIOD", config_corrente["initend"])
 
@@ -469,6 +490,7 @@ class GestoreDimensioni:
         # Creare oggetto FactTable
         tabella = FactTable(config_corrente,
                             self.idper,
+                            spark = self.spark,
                             user = self.user,
                             pw = self.pw,
                             n_user=self.n_user,
@@ -501,7 +523,8 @@ class GestoreDimensioni:
                                         "password": self.n_pw
                             })
 
-        # return tabella, nome_tabella
+    def close_spark_session(self):
+        self.spark.stop()
 
 
 

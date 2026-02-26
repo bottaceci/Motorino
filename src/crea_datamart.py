@@ -57,3 +57,6 @@ with open(path_file_dimensioni) as f:
                                         dimensione)
 
         print(f"[INFO] Dimensione '{dimensione}' caricato correttamente su Oracle.")
+
+# Close the spark session cleanly
+gestore.close_spark_session()

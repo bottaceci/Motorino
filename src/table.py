@@ -12,13 +12,8 @@ from operazioni import Operazioni  # importa la tua classe Operazioni
 class TabellaDipendenti:
 
     # Costruttore
-    def __init__(self, path_csv, path_log, idper):
-        self.spark = (
-            SparkSession.builder
-            .master("local[1]")
-            .appName("FlussoGenerico")
-            .getOrCreate()
-        )
+    def __init__(self, spark, path_csv, path_log, idper):
+        self.spark = spark
 
         self.idper = idper
         self.path_log = path_log
@@ -157,14 +152,8 @@ class TabellaDipendenti:
     
 class StagingTable:
 
-    def __init__(self, conf, idper, user, pw, dsn, path_log):
-        self.spark = (
-            SparkSession.builder
-                .master("local[1]")
-                .appName("FlussoGenerico")
-                .getOrCreate()
-        )
-
+    def __init__(self, conf, spark, idper, user, pw, dsn, path_log):
+        self.spark = spark
         self.idper = idper
         self.path_log = path_log
         self.conf = conf
@@ -369,13 +358,8 @@ class StagingTable:
         return tabella_ins, tabella_hist_ins, tabella_upd
     
 class FactTable:
-    def __init__(self, conf, idper, user, pw, n_user, n_pw, dsn, path_log):
-        self.spark = (
-            SparkSession.builder
-                .master("local[1]")
-                .appName("FlussoGenerico")
-                .getOrCreate()
-        )
+    def __init__(self, conf, idper, spark, user, pw, n_user, n_pw, dsn, path_log):
+        self.spark = spark
 
         self.idper = idper
         self.path_log = path_log
