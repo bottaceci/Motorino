@@ -93,7 +93,8 @@ class GestoreFlusso:
         if flusso_corrente not in self.config_all:
             msg = f"Flusso {flusso_corrente} non trovato nella configurazione JSON"
             self.logger.error(msg)
-            raise ValueError(msg)
+            return None
+            #raise ValueError(msg)
 
         config_corrente = self.config_all[flusso_corrente]["columns"]
         columns_oracle = list(config_corrente.keys())  # nomi colonne come su Oracle
@@ -189,18 +190,22 @@ class GestoreDimensioni:
         if current_dimension not in self.config_all:
             msg = f"Dimensione {current_dimension} non trovata nella configurazione JSON"
             self.logger.error(msg)
-            raise ValueError(msg)
+            return None
+            #raise ValueError(msg)
         
         config_corrente = self.config_all[current_dimension]
 
         # Creare oggetto StagingTable
         tabella = StagingTable(config_corrente,
-                               self.idper,
+                               idper = self.idper,
                                spark = self.spark,
                                user = self.user,
                                pw = self.pw,
                                dsn = self.dsn,
                                path_log=path_log)
+        
+        if tabella.df is None:
+            return None
 
         # Ricavare dataframe
         df_grezzo = tabella.givemedataframe()
@@ -240,7 +245,8 @@ class GestoreDimensioni:
         if current_dimension not in self.config_all:
             msg = f"Dimensione {current_dimension} non trovata nella configurazione JSON"
             self.logger.error(msg)
-            raise ValueError(msg)
+            return None
+            #raise ValueError(msg)
         
         config_corrente = self.config_all[current_dimension]
         columns_oracle = config_corrente["dimension_columns"]
@@ -291,7 +297,8 @@ class GestoreDimensioni:
         if current_dimension not in self.config_all:
             msg = f"Dimensione {current_dimension} non trovata nella configurazione JSON"
             self.logger.error(msg)
-            raise ValueError(msg)
+            return None
+            #raise ValueError(msg)
         
         config_corrente = self.config_all[current_dimension]
         columns_oracle = config_corrente["dimension_columns"]
@@ -383,7 +390,8 @@ class GestoreDimensioni:
         if current_dimension not in self.config_all:
             msg = f"Dimensione {current_dimension} non trovata nella configurazione JSON"
             self.logger.error(msg)
-            raise ValueError(msg)
+            return None
+            #raise ValueError(msg)
         
         config_corrente = self.config_all[current_dimension]
 
@@ -429,7 +437,8 @@ class GestoreDimensioni:
         if current_dimension not in self.config_all:
             msg = f"Dimensione {current_dimension} non trovata nella configurazione JSON"
             self.logger.error(msg)
-            raise ValueError(msg)
+            return None
+            #raise ValueError(msg)
         
         config_corrente = self.config_all[current_dimension]
 
@@ -483,13 +492,14 @@ class GestoreDimensioni:
         if current_dimension not in self.config_all:
             msg = f"Dimensione {current_dimension} non trovata nella configurazione JSON"
             self.logger.error(msg)
-            raise ValueError(msg)
+            return None
+            #raise ValueError(msg)
         
         config_corrente = self.config_all[current_dimension]
 
         # Creare oggetto FactTable
         tabella = FactTable(config_corrente,
-                            self.idper,
+                            idper = self.idper,
                             spark = self.spark,
                             user = self.user,
                             pw = self.pw,

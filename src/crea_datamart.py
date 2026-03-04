@@ -39,6 +39,9 @@ with open(path_file_dimensioni) as f:
         else:
             dataframes = gestore.process_dimension(path_log, dimensione)
 
+            if dataframes is None:
+                continue
+
             if 'tab_ins' in dataframes:
                 gestore.load_ins_to_oracle(dataframes["tab_ins"],
                                         dataframes["nome_tabella"],

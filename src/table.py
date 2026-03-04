@@ -169,24 +169,46 @@ class StagingTable:
             "pyspark-shell"
         )
 
+        # Logging configurazione
+        logging.basicConfig(
+            filename=self.path_log,
+            filemode='a',
+            level=logging.INFO,
+            format="%(message)s",
+            force=True
+        )
+
         # Creazione della staging table per il caricamento sul datamart
         self.table_list = []
         for table in self.conf["02_tables"]:
             self.table_list.append(table)
 
+        # Log iniziale
+        logging.info(
+            "ID_PER=%s, Operazione=Costruttore, Stato=OK, Tabelle=%s, Data=%s",
+            self.idper, self.table_list, datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+
         # Lettura prima tabella
         sql = f"select {",".join(self.conf["02_tables"][self.table_list[0]]["columns"])} from {self.table_list[0]} PARTITION(P_{self.idper})"
 
-        self.df = (
-            self.spark.read
-                .format("jdbc")
-                .option("url", f"jdbc:oracle:thin:@//{self.dsn}")
-                .option("driver", "oracle.jdbc.OracleDriver")
-                .option("query", sql)
-                .option("user", self.user)
-                .option("password", self.pw)
-                .load()
-        )
+
+        try:
+            self.df = (
+                self.spark.read
+                    .format("jdbc")
+                    .option("url", f"jdbc:oracle:thin:@//{self.dsn}")
+                    .option("driver", "oracle.jdbc.OracleDriver")
+                    .option("query", sql)
+                    .option("user", self.user)
+                    .option("password", self.pw)
+                    .load()
+            )
+        except:
+            logging.info("ID_PER=%s, Error in reading table from the SA. Check if Partition P_%s exists, Data=%s",
+                         self.idper, self.idper, datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            )
+            self.df = None
 
         # eventuale JOIN altre tabelle
         if len(self.table_list) > 1:
@@ -206,20 +228,6 @@ class StagingTable:
 
                 self.df = self.df.join(df_1, on=self.conf["02_tables"][t]["join_key"])
 
-        # Logging configurazione
-        logging.basicConfig(
-            filename=self.path_log,
-            filemode='w',
-            level=logging.INFO,
-            format="%(message)s",
-            force=True
-        )
-
-        # Log iniziale
-        logging.info(
-            "ID_PER=%s, Operazione=Costruttore, Stato=OK, Tabelle=%s, Data=%s",
-            self.idper, self.table_list, datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        )
 
     # Funzione che mostra la "tabella".
     def show(self):
